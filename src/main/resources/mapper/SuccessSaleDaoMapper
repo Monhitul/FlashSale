@@ -1,0 +1,27 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.moon.dao.SuccessSaleDao">
+
+    <insert id="insertSuccessSale">
+        # 主键冲突，报错
+        # ignore表示主键冲突时忽略，不插入，返回0
+        insert ignore into success_sale(goods_id, user_phone, state)
+        values (#{goodsId}, #{userPhone}, 0)
+    </insert>
+
+    <!--Mybatis别名时可以忽略 as -->
+    <select id="queryByIdWithGoods" resultType="SuccessSale">
+        select
+               ss.goods_id,ss.user_phone,ss.create_time,ss.state,
+               g.goods_id "goods.goods_id",
+               g.name "goods.name",
+               g.number "goods.number",
+               g.start_time "goods.start_time",
+               g.end_time "goods.end_time",
+               g.create_time "goods.create_time"
+        from success_sale ss
+                 inner join goods g on ss.goods_id = g.goods_id
+        where ss.goods_id = #{goodsId} and ss.user_phone = #{userPhone}
+    </select>
+</mapper>

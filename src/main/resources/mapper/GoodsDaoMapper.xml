@@ -1,0 +1,27 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.moon.dao.GoodsDao">
+
+    <update id="reduceNumber">
+        update goods
+        set number = number - 1
+        where goods_id = #{goodsId}
+          and start_time <![CDATA[ <= ]]> #{saleTime}
+          and end_time >= #{saleTime}
+          and number > 0;
+    </update>
+
+    <select id="queryById" resultType="Goods" parameterType="long">
+        select goods_id, name, number, start_time, end_time, create_time
+        from goods
+        where goods_id = #{goodsId}
+    </select>
+
+    <select id="queryAll" resultType="Goods">
+        select goods_id, name, number, start_time, end_time, create_time
+        from goods
+        order by create_time desc
+        limit #{offset}, #{limit}
+    </select>
+</mapper>
